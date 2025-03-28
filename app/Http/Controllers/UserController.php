@@ -51,4 +51,36 @@ class UserController extends Controller
         return $this->successResponse($user, Response::HTTP_CREATED);
 
     }
+
+    public function show($userid) {
+        $users = User::findOrFail($userid);
+        return $this->successResponse($users);
+
+    }
+
+    public function update(Request $request, $userid) {
+        $rules = [
+            'username' => 'max:20',
+            'password' => 'max:20',
+            'gender' => 'in:Male,Female',
+        ];
+
+        $this->validate($request, $rules);
+        $users = User::findOrFail($userid);
+
+        $users->fill($request->all());
+
+        if ($users->isclean()) {
+            return $this->errorResponse('At least one value must change', Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $users->save();
+        return $this->successResponse($users);
+    }
+
+    public function delete($userid) {
+        $users = User::findOrFail($userid);
+        users->delete();
+        return $this->errorResponse('User ID Does Not Exists', Response::HTTP_NOT_FOUND);
+    }
 }
