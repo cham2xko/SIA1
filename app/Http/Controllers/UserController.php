@@ -52,22 +52,20 @@ class UserController extends Controller
 
     }
 
-    public function show($userid) {
-        $users = User::findOrFail($userid);
+    public function show($id) {
+        $users = User::findOrFail($id);
         return $this->successResponse($users);
 
     }
 
-    public function update(Request $request, $userid) {
+    public function update(Request $request, $id) {
         $rules = [
             'username' => 'max:20',
             'password' => 'max:20',
             'gender' => 'in:Male,Female',
         ];
-
         $this->validate($request, $rules);
-        $users = User::findOrFail($userid);
-
+        $users = User::findOrFail($id);
         $users->fill($request->all());
 
         if ($users->isclean()) {
@@ -78,9 +76,9 @@ class UserController extends Controller
         return $this->successResponse($users);
     }
 
-    public function delete($userid) {
-        $users = User::findOrFail($userid);
-        users->delete();
+    public function delete($id) {
+        $users = User::findOrFail($id);
+        $users->delete();
         return $this->errorResponse('User ID Does Not Exists', Response::HTTP_NOT_FOUND);
     }
 }
